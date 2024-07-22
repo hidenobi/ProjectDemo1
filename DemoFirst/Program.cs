@@ -1,5 +1,5 @@
-using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using ProjectDemo1.Configurations;
 using ProjectDemo1.Migrations;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -12,17 +12,7 @@ var serverVersion = new MySqlServerVersion(new Version(8, 0, 23));
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseMySql(connectionString, serverVersion));
 
-builder.Services.AddIdentity<AppUser, IdentityRole>(options =>
-    {
-        options.Password.RequireDigit = false;
-        options.Password.RequireNonAlphanumeric = false;
-        options.Password.RequireUppercase = false;
-        options.Password.RequireLowercase = false;
-        options.Password.RequireNonAlphanumeric = false;
-        options.Password.RequiredLength = 1;
-    })
-    .AddEntityFrameworkStores<AppDbContext>()
-    .AddDefaultTokenProviders();
+ServiceConfiguration.ConfigPassword(builder.Services);
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
